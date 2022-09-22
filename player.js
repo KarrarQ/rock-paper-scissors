@@ -14,3 +14,12 @@ class Player {
   winGame() {
     this.wins++;
   }
+
+  saveWinsToStorage() {
+      localStorage.setItem(`${this.name}`, this.wins);
+    }
+
+    retrieveWinsFromStorage() {
+      this.wins = parseInt(localStorage.getItem(`${this.name}`));
+    }
+  }
