@@ -37,4 +37,30 @@ class Game {
       this.evaluateChoices(computerChoice, "Rock", "Scissors");
     }
   }
+
+  evaluateChoices(computerChoice, winCondition1, winCondition2) {
+    if (computerChoice === winCondition1 || computerChoice === winCondition2) {
+      this.players[0].winGame();
+      this.winner = this.players[0];
+    } else {
+      this.players[1].winGame();
+      this.winner = this.players[1];
+    }
+  }
+  
+  decideWinner() {
+    if (this.winner.name === "Draw") {
+      return "Draw";
+    } else if (this.winner === this.players[0]) {
+      return "Human";
+    } else {
+      return "Computer";
+    }
+  }
+
+  clearGame() {
+    this.players = [];
+    this.winner = "";
+    this.gameType = "";
+  }
 }
