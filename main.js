@@ -1,10 +1,41 @@
 var currentGame = new Game()
 
+var changeGameBtn = document.querySelector("#changeGameBtn");
+var chooseGameDifficulty = document.querySelector("#chooseGameDifficulty");
+var difficultGameCard = document.querySelector("#difficultGameCard");
+var difficultPlayerSelect  = document.querySelector("#difficultPlayerSelect");
+var mainGame = document.querySelector("#mainGame");
+var playerOneSection = document.querySelector("#playerOneSection");
+var playerOneWins = document.querySelector("#playerOneWins");
+var playerTwoSection = document.querySelector("#playerTwoSection");
+var playerTwoWins = document.querySelector("#playerTwoWins");
+var regularGameCard = document.querySelector("#regularGameCard");
+var regularPlayerSelect = document.querySelector("#regularPlayerSelect");
+
 window.addEventListener('load,', function() {
   currentGame.gameType = 'Regular'
   currentGame.addplayers();
   loadStorage()
 })
+
+regularGameCard.addEventListener("click", function() {
+  currentGame.gameType = "Regular";
+  switchView(regularPlayerSelect, chooseGameDifficulty);
+});
+
+difficultGameCard.addEventListener("click", function() {
+  currentGame.gameType = "Difficult";
+  switchView(difficultPlayerSelect, chooseGameDifficulty);
+});
+
+regularPlayerSelect.addEventListener("click", function(event) {
+  selectPlayerChoice(event, regularPlayerSelect);
+});
+
+difficultPlayerSelect.addEventListener("click", function(event) {
+  selectPlayerChoice(event, difficultPlayerSelect);
+});
+
 function loadStorage() {
   playerOneSection.insertAdjacentHTML("afterbegin", `
   <h3>${currentGame.players[0].token}</h3>
@@ -20,4 +51,63 @@ function loadStorage() {
   }
   playerOneWins.innerText = `Wins: ${currentGame.players[0].wins}`;
   playerTwoWins.innerText = `Wins: ${currentGame.players[1].wins}`;
+}
+
+function switchView(viewTo, viewFrom) {
+  viewFrom.classList.add("hidden");
+  viewTo.classList.remove("hidden");
+}
+
+function selectPlayerChoice(event, currentView) {
+  if (event.target.id === "rock") {
+    currentGame.setPlayerChoice(0, "Rock");
+    currentGame.players[0].choiceImage = "assets/happy-rocks.png";
+  } else if (event.target.id === "scissors") {
+    currentGame.setPlayerChoice(0, "Scissors");
+    currentGame.players[0].choiceImage = "assets/happy-scissors.png";
+  } else if (event.target.id === "paper") {
+    currentGame.setPlayerChoice(0, "Paper");
+    currentGame.players[0].choiceImage = "assets/happy-paper.png";
+  } else if (event.target.id === "lizard") {
+    currentGame.setPlayerChoice(0, "Lizard");
+    currentGame.players[0].choiceImage = "assets/iguana.png";
+  } else if (event.target.id === "alien") {
+    currentGame.setPlayerChoice(0, "Alien");
+    currentGame.players[0].choiceImage = "assets/ufo.png";
+  }
+  runGame();
+  switchView(mainGame, currentView);
+}
+
+function determineGameDifficulty() {
+  var gameDifficulty;
+  if (currentGame.gameType === "Regular") {
+    gameDifficulty = regularPlayerSelect;
+  } else {
+    gameDifficulty = difficultPlayerSelect;
+  }
+  return gameDifficulty;
+}
+
+function runGame() {
+  computerChoice();
+  currentGame.playMatch();
+  updateWins();
+  toggleChangeGameBtn();
+  var gameDifficulty = determineGameDifficulty();
+  switchView(winGameBoard, gameDifficulty);
+  displayWinMessage();
+  currentGame.players[0].saveWinsToStorage();
+  currentGame.players[1].saveWinsToStorage();
+}
+
+function computerChoice() {
+  var optionNumber;
+  if (currentGame.gameType === "Difficult") {
+    optionNumber = 5;
+  } else {
+    optionNumber = 3;
+  }
+  var randomChoice = Math.floor(Math.random() * optionNumber) + 1;
+  evaluateComputerChoice(randomChoice);
 }
