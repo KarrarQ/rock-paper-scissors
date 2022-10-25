@@ -111,3 +111,22 @@ function computerChoice() {
   var randomChoice = Math.floor(Math.random() * optionNumber) + 1;
   evaluateComputerChoice(randomChoice);
 }
+
+function evaluateComputerChoice(randomChoice) {
+  if (randomChoice === 1) {
+    currentGame.setPlayerChoice(1, "Rock");
+    currentGame.players[1].choiceImage = "assets/happy-rocks.png";
+  } else if (randomChoice === 2) {
+    currentGame.setPlayerChoice(1, "Scissors");
+    currentGame.players[1].choiceImage = "assets/happy-scissors.png";
+  } else if (randomChoice === 3) {
+    currentGame.setPlayerChoice(1, "Paper");
+    currentGame.players[1].choiceImage = "assets/happy-paper.png";
+  } else if (randomChoice === 4) {
+    currentGame.setPlayerChoice(1, "Lizard");
+    currentGame.players[1].choiceImage = "assets/iguana.png";
+  } else if (randomChoice === 5) {
+    currentGame.setPlayerChoice(1, "Alien");
+    currentGame.players[1].choiceImage = "assets/ufo.png";
+  }
+}
