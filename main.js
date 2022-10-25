@@ -13,7 +13,6 @@ var regularGameCard = document.querySelector("#regularGameCard");
 var regularPlayerSelect = document.querySelector("#regularPlayerSelect");
 
 window.addEventListener('load,', function() {
-  currentGame.gameType = 'Regular'
   currentGame.addplayers();
   loadStorage()
 })
