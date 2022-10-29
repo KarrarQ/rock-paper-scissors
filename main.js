@@ -12,10 +12,10 @@ var playerTwoWins = document.querySelector("#playerTwoWins");
 var regularGameCard = document.querySelector("#regularGameCard");
 var regularPlayerSelect = document.querySelector("#regularPlayerSelect");
 
-window.addEventListener('load,', function() {
-  currentGame.addplayers();
-  loadStorage()
-})
+window.addEventListener("load", function() {
+  currentGame.addPlayers();
+  loadStorage();
+});
 
 regularGameCard.addEventListener("click", function() {
   currentGame.gameType = "Regular";
@@ -33,6 +33,17 @@ regularPlayerSelect.addEventListener("click", function(event) {
 
 difficultPlayerSelect.addEventListener("click", function(event) {
   selectPlayerChoice(event, difficultPlayerSelect);
+});
+
+playAgainBtn.addEventListener("click", startNewGame);
+
+changeGameBtn.addEventListener("click", resetGame);
+
+resetWinsBtn.addEventListener("click", function() {
+  localStorage.clear();
+  currentGame.clearGame();
+  resetGame();
+  location.reload();
 });
 
 function loadStorage() {
@@ -128,4 +139,44 @@ function evaluateComputerChoice(randomChoice) {
     currentGame.setPlayerChoice(1, "Alien");
     currentGame.players[1].choiceImage = "assets/ufo.png";
   }
+}
+
+function toggleChangeGameBtn() {
+  changeGameBtn.classList.toggle("hidden");
+}
+
+function updateWins() {
+  if (currentGame.winner === currentGame.players[0]) {
+    playerOneWins.innerText = `Wins: ${currentGame.players[0].wins}`;
+  } else if (currentGame.winner === currentGame.players[1]) {
+    playerTwoWins.innerText = `Wins: ${currentGame.players[1].wins}`;
+  }
+}
+
+function displayWinMessage() {
+  winMessage.innerHTML = ``;
+  if (currentGame.winner.name === "Draw") {
+    winMessage.insertAdjacentHTML("afterbegin", `
+    <h2>It's a draw!</h2>
+    <img src="${currentGame.players[0].choiceImage}">
+    <img src="${currentGame.players[1].choiceImage}">
+    `);
+  } else {
+    winMessage.insertAdjacentHTML("afterbegin", `
+    <h3>${currentGame.winner.name} wins!</h3>
+    <img src="${currentGame.players[0].choiceImage}">
+    <img src="${currentGame.players[1].choiceImage}">
+    `);
+  }
+}
+
+function startNewGame() {
+  toggleChangeGameBtn();
+  var gameDifficulty = determineGameDifficulty();
+  switchView(gameDifficulty, winGameBoard);
+}
+
+function resetGame() {
+  toggleChangeGameBtn();
+  switchView(chooseGameDifficulty, winGameBoard);
 }
